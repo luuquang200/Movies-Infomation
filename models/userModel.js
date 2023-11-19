@@ -26,6 +26,14 @@ class User {
 
   static async findByEmail(email) {
     return db.getUserByEmail(email);
+  } 
+
+  static async update(id, property, value) {
+    return db.updateOne('users', id, property, value);
+  }
+
+  static async findBySessionId(sessionId) {
+    return db.getUserBySessionId(sessionId);
   }
 }
 

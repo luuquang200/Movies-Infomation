@@ -1,6 +1,7 @@
 
 $(document).ready(function () {
-    $("form").on('submit', function (event) {
+    // validate register form
+    $("#regiter-form").on('submit', function (event) {
         var isValid = true;
 
         // Validate username
@@ -59,6 +60,7 @@ $(document).ready(function () {
                 data: $(this).serialize(),
                 success: function() {
                     alert('Registration successful');
+                    window.location.href = '/user/login';
                 },
                 error: function(xhr) {
                     if (xhr.status === 400) {
@@ -71,6 +73,53 @@ $(document).ready(function () {
             // Prevent the form from being submitted
             event.preventDefault();
         }
-
     });
+
+    // validate login form
+    $("#login-form").on('submit', function (event) {
+        var isValid = true;
+
+        // Validate username
+        var username = $("#username").val();
+        if (username.length < 5) {
+            $("#username-error").text("Username must be at least 5 characters long");
+            isValid = false;
+        } else {
+            $("#username-error").text("");
+        }
+
+        // Validate password
+        var password = $("#password").val();
+        if (password.length < 8) {
+            $("#password-error").text("Password must be at least 8 characters long");
+            isValid = false;
+        } else {
+            $("#password-error").text("");
+        }
+
+        // If form is not valid, prevent it from being submitted
+        if (!isValid) {
+            event.preventDefault();
+        } else {
+            $.ajax({
+                url: '/user/login',
+                type: 'post',
+                data: $(this).serialize(),
+                success: function() {
+                    alert('Login successful');
+                    window.location.href = '/content';
+                },
+                error: function(xhr) {
+                    if (xhr.status === 400) {
+                        var error = JSON.parse(xhr.responseText);
+                        $('#' + error.field + '-error').text(error.message);
+                    }
+                }
+            });
+
+            // Prevent the form from being submitted
+            event.preventDefault();
+        }
+    });
+
 });

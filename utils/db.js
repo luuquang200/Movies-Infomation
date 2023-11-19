@@ -62,6 +62,22 @@ module.exports = {
         }
     },
 
+    // update a record in a table by id
+    updateOne: async (tbName, id, property, value) => {
+        let databaseConnection = null;
+        try {
+            databaseConnection = await db.connect();
+            const sql = `UPDATE ${tbName} SET ${property} = $1 WHERE id = $2`;
+            await databaseConnection.none(sql, [value, id]);
+        } catch (error) {
+            throw error;
+        } finally {
+            if (databaseConnection) {
+                databaseConnection.done();
+            }
+        }
+    },
+
     // insert a user into the users table
     insertUser: async (data) => {
         let databaseConnection = null;
@@ -113,6 +129,25 @@ module.exports = {
             }
         }
     },
+
+    // get user by session id
+    getUserBySessionId: async (sessionId) => {
+        let databaseConnection = null;
+        try {
+            databaseConnection = await db.connect();
+            const data = await databaseConnection.oneOrNone(`SELECT * FROM users WHERE sessionId = $1`, [sessionId]);
+            return data;
+        } catch (error) {
+            throw error;
+        } finally {
+            if (databaseConnection) {
+                databaseConnection.done();
+            }
+        }
+    },
+
+
+
     
 
 
