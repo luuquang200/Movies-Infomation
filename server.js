@@ -36,11 +36,18 @@ app.use(async (req, res, next) => {
     next();
 });
 
+function ensureAuthenticated(req, res, next) {
+    if (req.user) {
+        next();
+    } else {
+        res.redirect('/user/login');
+    }
+}
+
 app.use('/user', userRouter); 
-app.use('/content', contentRouter);
+app.use('/content', ensureAuthenticated, contentRouter);
 
 app.get('/', (req, res) => {
-    db.testDatabaseConnection();
     if (req.user) {
         res.redirect('/content');
     } else {

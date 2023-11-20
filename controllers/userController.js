@@ -59,7 +59,9 @@ module.exports = {
             await User.update(user.id, 'sessionid', user.sessionId);
 
             // Send the session ID in a cookie
-            res.cookie('sessionId', user.sessionId, {maxAge: 86400 * 1000, httpOnly: true });
+            const remember = req.body.remember === 'on';
+            const maxAge = remember ? 15 * 24 * 60 * 60 * 1000 : null; // 15 days or session only
+            res.cookie('sessionId', user.sessionId, { maxAge, httpOnly: true });
             
             res.send('Login successful');
         } catch (err) {

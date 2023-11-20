@@ -4,11 +4,11 @@ const userController = require('../controllers/userController');
 
 router.post('/register', userController.register);
 router.get('/register', (req, res) => {
-    res.render('register', { layout: 'main' });
+    res.render('register', { layout: 'authentication' });
 });
 router.post('/login', userController.login);
 router.get('/login', (req, res) => {
-    res.render('login', { layout: 'main' });
+    res.render('login', { layout: 'authentication' });
 });
 
 
