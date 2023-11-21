@@ -146,6 +146,36 @@ module.exports = {
         }
     },
 
+   
+    none: async (sql, values) => {
+        let databaseConnection = null;
+        try {
+            databaseConnection = await db.connect();
+            await databaseConnection.none(sql, values);
+        } catch (error) {
+            throw error;
+        } finally {
+            if (databaseConnection) {
+                databaseConnection.done();
+            }
+        }
+    },
+
+    //oneOrNone
+    oneOrNone: async (sql, values) => {
+        let databaseConnection = null;
+        try {
+            databaseConnection = await db.connect();
+            const data = await databaseConnection.oneOrNone(sql, values);
+            return data;
+        } catch (error) {
+            throw error;
+        } finally {
+            if (databaseConnection) {
+                databaseConnection.done();
+            }
+        }
+    },
 
 
     

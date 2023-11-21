@@ -1,0 +1,14 @@
+<div class="container h-100 d-flex justify-content-center align-items-center">
+    <div class="card shadow col-md-4 p-0">
+        <div class="card-body">
+            <h3 class="text-center">Import data from Json Files</h3>
+            <form action="/data-import" method="post" enctype="multipart/form-data" class="form-group d-flex flex-column">
+                <div class="custom-file mt-2">
+                    <input type="file" name="dataFiles" multiple class="custom-file-input" id="dataFiles">
+                </div>
+                <div class="mt-2" id="fileList"></div>
+                <button type="submit" class="btn btn-primary mt-3">Import</button>
+            </form>
+        </div>
+    </div>
+</div>

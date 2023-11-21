@@ -6,3 +6,7 @@ body, html {
     background-color: #f8f9fa; 
     color: #6c757d; 
 }
+
+.navbar-brand:hover {
+    color: #ff0;
+}

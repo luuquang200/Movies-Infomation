@@ -7,6 +7,7 @@ const db = require('./utils/db');
 const User = require('./models/userModel');
 const userRouter = require('./routers/userRouter');
 const contentRouter = require('./routers/contentRouter');
+const dataImportRouter = require('./routers/dataImportRouter');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -46,6 +47,7 @@ function ensureAuthenticated(req, res, next) {
 
 app.use('/user', userRouter); 
 app.use('/content', ensureAuthenticated, contentRouter);
+app.use('/data-import', ensureAuthenticated, dataImportRouter);
 
 app.get('/', (req, res) => {
     if (req.user) {

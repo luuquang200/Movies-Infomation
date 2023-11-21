@@ -122,4 +122,15 @@ $(document).ready(function () {
         }
     });
 
+
+    // import data
+    $('#dataFiles').on('change', function() {
+        var fileList = $('#fileList');
+        var fileNames = [];
+        $.each(this.files, function(i, file) {
+            fileNames.push(file.name);
+        });
+        fileList.text(fileNames.join(', '));
+    });
+
 });
