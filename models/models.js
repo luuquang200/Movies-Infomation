@@ -1,32 +1,37 @@
 const db = require('../utils/db');
 
-class Movies {
-    static async insert(movie) {
-        // Implementation here...
-        const { id, img, title, year, topRank, rating, ratingCount } = movie;
-        const result = await db.none(
-            'INSERT INTO Movies (id, img, title, year, topRank, rating, ratingCount) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-            [id, img, title, year, topRank, rating, ratingCount]
-        );
-        return result;
-    }
+// class Movies {
+//     static async insert(movie) {
+//         // Implementation here...
+//         const { id, img, title, year, topRank, rating, ratingCount } = movie;
+//         const result = await db.none(
+//             'INSERT INTO Movies (id, img, title, year, topRank, rating, ratingCount) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+//             [id, img, title, year, topRank, rating, ratingCount]
+//         );
+//         return result;
+//     }
 
-    static async update(movie) {
-        // Implementation here...
-        const { id, img, title, year, topRank, rating, ratingCount } = movie;
-        const result = await db.none(
-            'UPDATE Movies SET img = $1, title = $2, year = $3, topRank = $4, rating = $5, ratingCount = $6 WHERE id = $7',
-            [img, title, year, topRank, rating, ratingCount, id]
-        );
-        return result;
-    }
+//     static async update(movie) {
+//         // Implementation here...
+//         const { id, img, title, year, topRank, rating, ratingCount } = movie;
+//         const result = await db.none(
+//             'UPDATE Movies SET img = $1, title = $2, year = $3, topRank = $4, rating = $5, ratingCount = $6 WHERE id = $7',
+//             [img, title, year, topRank, rating, ratingCount, id]
+//         );
+//         return result;
+//     }
 
-    static async findById(id) {
-        // Implementation here...
-        const result = await db.oneOrNone('SELECT * FROM Movies WHERE id = $1', [id]);
-        return result;
-    }
-}
+//     static async findById(id) {
+//         // Implementation here...
+//         const result = await db.oneOrNone('SELECT * FROM Movies WHERE id = $1', [id]);
+//         return result;
+//     }
+
+//     static async deleteAll() {
+//         const result = await db.deleteAll('Movies');
+//         return result;
+//     }
+// }
 
 class Genres {
     static async findByName(name) {
@@ -50,6 +55,11 @@ class Genres {
             return null;
         }
     }
+
+    static async deleteAll() {
+        const result = await db.deleteAll('Genres');
+        return result;
+    }
 }
 
 class MovieGenres {
@@ -57,6 +67,11 @@ class MovieGenres {
         // Implementation here...
         const { movieId, genreId } = movieGenre;
         const result = await db.none('INSERT INTO MovieGenres (movieId, genreId) VALUES ($1, $2)', [movieId, genreId]);
+        return result;
+    }
+
+    static async deleteAll() {
+        const result = await db.deleteAll('MovieGenres');
         return result;
     }
 }
@@ -67,12 +82,22 @@ class Reviews {
         const result = await db.none('INSERT INTO Reviews (movieId, author, authorRating, helpfulnessScore, interestingVotesDown, interestingVotesUp, languageCode, reviewText, reviewTitle, submissionDate) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)', [movieId, author, authorRating, helpfulnessScore, interestingVotesDown, interestingVotesUp, languageCode, reviewText, reviewTitle, submissionDate]);
         return result;
     }
+
+    static async deleteAll() {
+        const result = await db.deleteAll('Reviews');
+        return result;
+    }
 }
 
 class Synopses {
     static async insert(synopsis) {
         const { movieId, hasProfanity, language, text } = synopsis;
         const result = await db.none('INSERT INTO Synopses (movieId, hasProfanity, language, text) VALUES ($1, $2, $3, $4)', [movieId, hasProfanity, language, text]);
+        return result;
+    }
+
+    static async deleteAll() {
+        const result = await db.deleteAll('Synopses');
         return result;
     }
 }
@@ -94,6 +119,11 @@ class Casts {
         const result = await db.none('INSERT INTO Casts (id, image, legacyNameText, name, birthDate, birthPlace, gender, heightCentimeters, nicknames, realName) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)', [id, image, legacyNameText, name, birthDate, birthPlace, gender, heightCentimeters, nicknamesStr, realName]);
         return result;
     }
+
+    static async deleteAll() {
+        const result = await db.deleteAll('Casts');
+        return result;
+    }
 }
 
 class MovieCasts {
@@ -102,6 +132,11 @@ class MovieCasts {
         const result = await db.none('INSERT INTO MovieCasts (movieId, castId, character) VALUES ($1, $2, $3)', [movieId, castId, character]);
         return result;
     }
+
+    static async deleteAll() {
+        const result = await db.deleteAll('MovieCasts');
+        return result;
+    }
 }
 
-module.exports = { Movies, Genres, MovieGenres, Reviews, Synopses, Casts, MovieCasts };
+module.exports = { Genres, MovieGenres, Reviews, Synopses, Casts, MovieCasts };

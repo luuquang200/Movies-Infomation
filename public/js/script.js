@@ -107,7 +107,7 @@ $(document).ready(function () {
                 data: $(this).serialize(),
                 success: function() {
                     alert('Login successful');
-                    window.location.href = '/content';
+                    window.location.href = '/home';
                 },
                 error: function(xhr) {
                     if (xhr.status === 400) {

@@ -2,8 +2,23 @@ const fs = require('fs');
 const multer  = require('multer');
 const upload = multer({ dest: 'uploads/' });
 const db = require('../utils/db');
-const { Movies, Genres, MovieGenres, Reviews, Synopses, Casts, MovieCasts} = require('../models/models');
-
+const {  Genres, MovieGenres, Reviews, Synopses, Casts, MovieCasts} = require('../models/models');
+const Movie = require('../models/movieModel');
+// remove all data from all tables
+const deleteAllData = async () => {
+    try {
+        await MovieCasts.deleteAll();
+        await Casts.deleteAll();
+        await MovieGenres.deleteAll();
+        await Genres.deleteAll();
+        await Reviews.deleteAll();
+        await Synopses.deleteAll();
+        await Movie.deleteAll();
+        return true;
+    } catch (err) {
+        throw err;
+    }
+}
 
 module.exports = {
     importData: (req, res) => {
@@ -11,6 +26,9 @@ module.exports = {
             if (err) {
                 return res.status(500).json({ message: 'Error uploading files' });
             }
+
+            // remove all data from all tables
+            await deleteAllData();
 
             for (let file of req.files) {
                 const data = fs.readFileSync(file.path, 'utf-8');
@@ -28,12 +46,14 @@ module.exports = {
                     const { id, img, title, year, topRank, rating, ratingCount } = movie;
                     const movieData = { id, img, title, year, topRank, rating, ratingCount };
                     // check if movie exists
-                    const movieExists = await Movies.findById(id);
+                    const movieExists = await Movie.findById(id);
                     if (movieExists) {
-                        await Movies.update(movieData);
+                        console.log('movie exists: id');
+                        console.log(movieData.id);
+                        await Movie.update(movieData);
                     }
                     else{
-                        await Movies.insert(movieData);
+                        await Movie.insert(movieData);
                     }
                 }
                 // Genres

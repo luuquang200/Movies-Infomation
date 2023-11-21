@@ -10,3 +10,30 @@ body, html {
 .navbar-brand:hover {
     color: #ff0;
 }
+
+/* home.hbs */
+h2 {
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+}
+
+card-body {
+    font-family: 'Arial', sans-serif;
+}
+
+.card-img-top{
+    width: auto;
+    max-height: 410px;
+    object-fit: cover;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.icon {
+    font-size: 30px; 
+    color: black;
+}

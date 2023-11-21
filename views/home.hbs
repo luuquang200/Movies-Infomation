@@ -1,0 +1,23 @@
+<div class="container home-container mt-4">
+    <div class="header-container">
+        <h2 class="mb-4">Top rating movies</h2>
+        <div class="pagination">
+            <a href="/home?page={{prevPage}}"><i class="bi bi-chevron-left icon"></i></a>
+            <a href="/home?page={{nextPage}}"><i class="bi bi-chevron-right icon"></i></a>
+        </div>
+    </div>
+    <div class="row">
+        {{#each movies}}
+            <div class="col-md-3">
+                <div class="card mb-4">
+                    <img class="card-img-top" src="{{this.img}}" alt="{{this.title}}">
+                    <div class="card-body">
+                        <h6 class="card-title">{{this.title}}</h6>
+                        <p class="card-text">Rating: {{this.rating}}</p>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+
+</div>

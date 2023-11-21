@@ -2,12 +2,18 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const hbs = require('express-handlebars')
+const handlebars = require('handlebars');
 const cookieParser = require('cookie-parser');
 const db = require('./utils/db');
 const User = require('./models/userModel');
 const userRouter = require('./routers/userRouter');
 const contentRouter = require('./routers/contentRouter');
 const dataImportRouter = require('./routers/dataImportRouter');
+
+// Register Handlebars helper
+handlebars.registerHelper('addOne', function(value) {
+    return value + 1;
+});
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -46,12 +52,12 @@ function ensureAuthenticated(req, res, next) {
 }
 
 app.use('/user', userRouter); 
-app.use('/content', ensureAuthenticated, contentRouter);
+app.use('/home', ensureAuthenticated, contentRouter);
 app.use('/data-import', ensureAuthenticated, dataImportRouter);
 
 app.get('/', (req, res) => {
     if (req.user) {
-        res.redirect('/content');
+        res.redirect('/home');
     } else {
         res.redirect('/user/login');
     }

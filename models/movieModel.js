@@ -13,10 +13,38 @@ class Movie {
 
     static async insert(movie) {
         const { id, img, title, year, topRank, rating, ratingCount } = movie;
-        await db.insertOne('Movies', { id, img, title, year, topRank, rating, ratingCount });
-        return id;
+        const result = await db.none(
+            'INSERT INTO Movies (id, img, title, year, topRank, rating, ratingCount) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+            [id, img, title, year, topRank, rating, ratingCount]
+        );
+        return result;
     }
 
+    static async update(movie) {
+        const { id, img, title, year, topRank, rating, ratingCount } = movie;
+        const result = await db.none(
+            'UPDATE Movies SET img = $1, title = $2, year = $3, topRank = $4, rating = $5, ratingCount = $6 WHERE id = $7',
+            [img, title, year, topRank, rating, ratingCount, id]
+        );
+        return result;
+    }
+
+    static async findById(id) {
+        const result = await db.oneOrNone('SELECT * FROM Movies WHERE id = $1', [id]);
+        return result;
+    }
+
+    static async deleteAll() {
+        const result = await db.deleteAll('Movies');
+        return result;
+    }
+
+
+    static async getTopRatingMovies(numberOfPage, page) {
+        const offset = (page - 1) * numberOfPage;
+        const result = await db.getSortedDataFromTable(numberOfPage, offset, 'Movies', 'rating');
+        return result;
+    }
 }
 
 module.exports = Movie;

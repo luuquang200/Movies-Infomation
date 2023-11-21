@@ -177,8 +177,40 @@ module.exports = {
         }
     },
 
-
+    // delete all records in a table
+    deleteAll: async (tbName) => {
+        let databaseConnection = null;
+        try {
+            databaseConnection = await db.connect();
+            await databaseConnection.none(`DELETE FROM ${tbName}`);
+            return true;
+        } catch (error) {
+            throw error;
+        } finally {
+            if (databaseConnection) {
+                databaseConnection.done();
+            }
+        }
+    },
     
+    
+    // get top n record with offset from a table
+    getSortedDataFromTable: async (limit, offset, tbName, sortingCriteria) => {
+        let databaseConnection = null;
+        try {
+            databaseConnection = await db.connect();
+            const data = await databaseConnection.any(`SELECT * FROM ${tbName} WHERE rating IS NOT NULL ORDER BY ${sortingCriteria} DESC LIMIT $1 OFFSET $2`, [limit, offset]);
+            return data;
+        } catch (error) {
+            console.error(`Error getting sorted data from ${tbName}:`, error);
+            throw new Error(`Could not get sorted data from ${tbName}`);
+        } finally {
+            if (databaseConnection) {
+                databaseConnection.done();
+            }
+        }
+    },
+
 
 
 };
