@@ -211,6 +211,53 @@ module.exports = {
         }
     },
 
+    // search for a movie by title or genre
+    searchMovie: async (searchTerm, per_page, page) => {
+        let databaseConnection = null;
+        try {
+            databaseConnection = await db.connect();
+            const offset = (page - 1) * per_page;
+
+            const total = await databaseConnection.one(`
+                SELECT COUNT(DISTINCT movies.id) 
+                FROM movies 
+                LEFT JOIN moviegenres ON movies.id = moviegenres.movieId
+                LEFT JOIN genres ON moviegenres.genreId = genres.id
+                WHERE movies.title ILIKE $1 OR genres.name ILIKE $1
+            `, [`%${searchTerm}%`]);
+
+            const data = await databaseConnection.any(`
+                SELECT movies.*, array_agg(genres.name) as genres 
+                FROM movies 
+                LEFT JOIN moviegenres ON movies.id = moviegenres.movieId
+                LEFT JOIN genres ON moviegenres.genreId = genres.id
+                WHERE movies.id IN (
+                    SELECT movies.id 
+                    FROM movies 
+                    LEFT JOIN moviegenres ON movies.id = moviegenres.movieId
+                    LEFT JOIN genres ON moviegenres.genreId = genres.id
+                    WHERE movies.title ILIKE $1 OR genres.name ILIKE $1 
+                )
+                GROUP BY movies.id
+                LIMIT $2 OFFSET $3
+            `, [`%${searchTerm}%`, per_page, offset]);  
+            
+            return {
+                page: page,
+                per_page: per_page,
+                total: total.count,
+                total_pages: Math.ceil(total.count / per_page),
+                data: data
+            };
+        } catch (error) {
+            console.error(`Error searching for movie:`, error);
+            throw new Error(`Could not search for movie`);
+        } finally {
+            if (databaseConnection) {
+                databaseConnection.done();
+            }
+        }
+    },
 
 
 };

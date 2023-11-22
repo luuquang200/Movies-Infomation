@@ -45,6 +45,12 @@ class Movie {
         const result = await db.getSortedDataFromTable(numberOfPage, offset, 'Movies', 'rating');
         return result;
     }
+
+    // search movies by title or genre
+    static async searchMovies(searchText, numberOfPage, page) {
+        const result = await db.searchMovie(searchText, numberOfPage, page);
+        return result;
+    }
 }
 
 module.exports = Movie;

@@ -4,11 +4,11 @@ const path = require('path');
 const hbs = require('express-handlebars')
 const handlebars = require('handlebars');
 const cookieParser = require('cookie-parser');
-const db = require('./utils/db');
 const User = require('./models/userModel');
 const userRouter = require('./routers/userRouter');
 const contentRouter = require('./routers/contentRouter');
 const dataImportRouter = require('./routers/dataImportRouter');
+const searchRouter = require('./routers/searchRouter');
 
 // Register Handlebars helper
 handlebars.registerHelper('addOne', function(value) {
@@ -54,6 +54,7 @@ function ensureAuthenticated(req, res, next) {
 app.use('/user', userRouter); 
 app.use('/home', ensureAuthenticated, contentRouter);
 app.use('/data-import', ensureAuthenticated, dataImportRouter);
+app.use('/search', ensureAuthenticated, searchRouter);
 
 app.get('/', (req, res) => {
     if (req.user) {

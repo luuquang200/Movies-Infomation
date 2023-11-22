@@ -1,0 +1,35 @@
+<div class="container mt-4">
+    <h1>Search Results</h1>
+
+    {{#if movies.length}}
+        <div class="row">
+            {{#each movies}}
+                <div class="col-md-3">
+                    <div class="card mb-4">
+                        <img class="card-img-top" src="{{this.img}}" alt="{{this.title}}">
+                        <div class="card-body">
+                            <h6 class="card-title">{{this.title}}</h6>
+                            <p class="card-text">Genre: {{#each this.genres}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</p>
+                            {{!-- <p class="card-text">Rating: {{this.rating}}</p> --}}
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+
+        {{#if total_pages}}
+            <div class="pagination">
+                {{#if prev_page}}
+                    <a href="?page={{prev_page}}">Previous</a>
+                {{/if}}
+                <span>Page {{page}} of {{total_pages}}</span>
+                {{#if next_page}}
+                    <a href="?page={{next_page}}">Next</a>
+                {{/if}}
+            </div>
+        {{/if}}
+    {{else}}
+        <p>No movies found.</p>
+    {{/if}}
+
+</div>
