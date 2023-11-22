@@ -259,5 +259,46 @@ module.exports = {
         }
     },
 
+    // get details for a movie
+    getMovieDetails: async (id) => {
+        let databaseConnection = null;
+        try {
+            databaseConnection = await db.connect();
+            const movie = await databaseConnection.oneOrNone(`SELECT * FROM movies WHERE id = $1`, [id]);
+            const genres = await databaseConnection.any(`SELECT genres.name FROM genres LEFT JOIN moviegenres ON genres.id = moviegenres.genreId WHERE moviegenres.movieId = $1`, [id]);
+            const casts = await databaseConnection.any(`SELECT casts.name FROM casts LEFT JOIN moviecasts ON casts.id = moviecasts.castId WHERE moviecasts.movieId = $1`, [id]);
+            const synopsis = await databaseConnection.oneOrNone(`SELECT text FROM synopses WHERE movieId = $1`, [id]);
+            return {
+                movie: movie,
+                genres: genres,
+                casts: casts,
+                synopsis: synopsis
+            };
+        } catch (error) {
+            console.error(`Error getting details for movie:`, error);
+            throw new Error(`Could not get details for movie`);
+        } finally {
+            if (databaseConnection) {
+                databaseConnection.done();
+            }
+        }
+    },
+
+    // get reviews for a movie
+    getMovieReviews: async (id) => {
+        let databaseConnection = null;
+        try {
+            databaseConnection = await db.connect();
+            const reviews = await databaseConnection.any(`SELECT * FROM reviews WHERE movieId = $1`, [id]);
+            return reviews;
+        } catch (error) {
+            console.error(`Error getting reviews for movie:`, error);
+            throw new Error(`Could not get reviews for movie`);
+        } finally {
+            if (databaseConnection) {
+                databaseConnection.done();
+            }
+        }
+    },
 
 };

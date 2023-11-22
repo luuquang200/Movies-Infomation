@@ -51,6 +51,18 @@ class Movie {
         const result = await db.searchMovie(searchText, numberOfPage, page);
         return result;
     }
+
+    // get detail of a movie by id
+    static async getMovieDetails(id) {
+        const result = await db.getMovieDetails(id);
+        return result;
+    }
+
+    // get reviews of a movie by id
+    static async getMovieReviews(id) {
+        const result = await db.getMovieReviews(id);
+        return result;
+    }
 }
 
 module.exports = Movie;

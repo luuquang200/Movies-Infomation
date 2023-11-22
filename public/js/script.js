@@ -133,4 +133,34 @@ $(document).ready(function () {
         fileList.text(fileNames.join(', '));
     });
 
+    // movie details page
+
+    $('#showMoreCasts').click(function(e) {
+        e.preventDefault();
+        $('#moreCasts').show();
+        $('#dots').hide();
+        $(this).hide();
+        $('#showLessCasts').show();
+    });
+
+    $('#showLessCasts').click(function(e) {
+        e.preventDefault();
+        $('#moreCasts').hide();
+        $('#dots').show();
+        $(this).hide();
+        $('#showMoreCasts').show();
+    });
+
+    $('.more').click(function(e) {
+        e.preventDefault();
+        $(this).parent().hide();
+        $('.full-text').show();
+    });
+
+    $('.less').click(function(e) {
+        e.preventDefault();
+        $(this).parent().hide();
+        $('.synopsis').show();
+    });
+
 });

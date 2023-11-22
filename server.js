@@ -8,6 +8,7 @@ const userRouter = require('./routers/userRouter');
 const contentRouter = require('./routers/contentRouter');
 const dataImportRouter = require('./routers/dataImportRouter');
 const searchRouter = require('./routers/searchRouter');
+const movieDetailRouter = require('./routers/movieDetailRouter');
 
 
 const app = express();
@@ -24,11 +25,52 @@ app.engine('hbs', hbs.engine(
         partialsDir: __dirname + '/views/partials/',
         helpers: {
             equals: function(a, b) {
-                console.log('equals');
-                console.log(a, b);
                 return a === b;
+            },
+
+            ifCond: function(v1, operator, v2, options) {
+                switch (operator) {
+                    case '==':
+                        return (v1 == v2) ? options.fn(this) : options.inverse(this);
+                    case '===':
+                        return (v1 === v2) ? options.fn(this) : options.inverse(this);
+                    case '!=':
+                        return (v1 != v2) ? options.fn(this) : options.inverse(this);
+                    case '!==':
+                        return (v1 !== v2) ? options.fn(this) : options.inverse(this);
+                    case '<':
+                        return (v1 < v2) ? options.fn(this) : options.inverse(this);
+                    case '<=':
+                        return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+                    case '>':
+                        return (v1 > v2) ? options.fn(this) : options.inverse(this);
+                    case '>=':
+                        return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+                    case '&&':
+                        return (v1 && v2) ? options.fn(this) : options.inverse(this);
+                    case '||':
+                        return (v1 || v2) ? options.fn(this) : options.inverse(this);
+                    default:
+                        return options.inverse(this);
+                }
+            },
+
+            truncateText: function(text, limit) {
+                if (text.length > limit) {
+                    return text.substring(0, limit) + '...';
+                } else {
+                    return text;
+                }
+            },
+
+            formatDate: function(date) {
+                return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' });
             }
+
+
+
         }
+
     }
 ))
 app.set('view engine', 'hbs');
@@ -57,6 +99,8 @@ app.use('/user', userRouter);
 app.use('/home', ensureAuthenticated, contentRouter);
 app.use('/data-import', ensureAuthenticated, dataImportRouter);
 app.use('/search', ensureAuthenticated, searchRouter);
+app.use('/movie', ensureAuthenticated, movieDetailRouter);
+
 
 app.get('/', (req, res) => {
     if (req.user) {

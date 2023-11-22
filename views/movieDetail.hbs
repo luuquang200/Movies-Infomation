@@ -1,0 +1,57 @@
+<div class="row movie-detail p-4">
+    <div class="col-md-4">
+        <img src="{{movie.img}}" alt="{{movie.title}}" class="img-fluid rounded poster-detail">
+    </div>
+    <div class="col-md-8">
+        <h2>{{movie.title}}</h2>
+        <p><strong>Year:</strong> <span class="custom-link">{{#if movie.year}}{{movie.year}}{{else}}N/A{{/if}}</span></p>
+        <p><strong>Rating:</strong> <span class="custom-link">{{#if movie.rating}}{{movie.rating}}{{else}}N/A{{/if}}</span></p>
+        <p><strong>Genres:</strong> <span class="custom-link">{{#each genres}}{{this.name}}{{#unless @last}}, {{/unless}}{{/each}}</span></p>
+        <p><strong>Casts:</strong> 
+                {{#each casts}}
+                    {{#ifCond @index '<' 20}}
+                        <a href="/cast/{{this.id}}" class="custom-link">{{this.name}}</a>{{#unless @last}}, {{/unless}}
+                    {{/ifCond}}
+                {{/each}}
+                {{#ifCond casts.length '>' 20}}
+                    <span id="dots" style="display: inline;">...</span>
+                    <span id="moreCasts" style="display: none;">
+                        {{#each casts}}
+                            {{#ifCond @index '>=' 20}}
+                                , <a href="/cast/{{this.id}}" class="custom-link">{{this.name}}</a>
+                            {{/ifCond}}
+                        {{/each}}
+                    </span> 
+                    <a href="#" id="showMoreCasts" >more</a>
+                    <a href="#" id="showLessCasts" style="display: none;" >less</a>
+                {{/ifCond}}
+            </p>
+        <p><strong>Synopsis:</strong> 
+            <span class="synopsis cusom-text">{{truncateText synopsis.text 1000}} <a href="#" class="more">more</a></span>
+            <span class="full-text cusom-text" style="display: none;">{{synopsis.text}} <a href="#" class="less">less</a></span>
+        </p>
+    </div>
+</div>
+<h3 class="ms-4">Reviews:</h3>
+{{!-- {{#each reviews}}
+    <div class="review card bg-light mb-3">
+        <div class="card-body">
+            <h4 class="card-title">{{this.reviewtitle}}</h4>
+            <p class="card-text">{{this.reviewtext}}</p>
+        </div>
+    </div>
+{{/each}} --}}
+{{#each reviews}}
+    <div class="card mb-4 m-4">
+        <div class="card-header">
+            <h5 class="card-title">{{this.reviewtitle}}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">by {{this.author}} on {{formatDate this.submissiondate}}</h6>
+        </div>
+        <div class="card-body">
+            <p class="card-text">{{this.reviewtext}}</p>
+        </div>
+        <div class="card-footer">
+            <small class="text-muted">{{this.authorrating}} out of 10 stars</small>
+        </div>
+    </div>
+{{/each}}
