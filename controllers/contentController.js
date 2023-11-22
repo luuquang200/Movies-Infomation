@@ -9,7 +9,7 @@ module.exports = {
             const movies = await Movie.getTopRatingMovies(numberOfPage, page);
             const prevPage = page > 1 ? page - 1 : null;
             const nextPage = movies.length === numberOfPage ? page + 1 : null;
-            res.render('home', { layout: 'main', movies, prevPage, nextPage });
+            res.render('home', { layout: 'main', movies, prevPage, nextPage});
         } catch (err) {
             console.error(err);
             res.status(500).send('Server error');

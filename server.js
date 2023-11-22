@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const hbs = require('express-handlebars')
-const handlebars = require('handlebars');
 const cookieParser = require('cookie-parser');
 const User = require('./models/userModel');
 const userRouter = require('./routers/userRouter');
@@ -10,10 +9,6 @@ const contentRouter = require('./routers/contentRouter');
 const dataImportRouter = require('./routers/dataImportRouter');
 const searchRouter = require('./routers/searchRouter');
 
-// Register Handlebars helper
-handlebars.registerHelper('addOne', function(value) {
-    return value + 1;
-});
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -26,7 +21,14 @@ app.engine('hbs', hbs.engine(
         extname: 'hbs',
         defaultLayout: 'main', 
         layoutsDir: __dirname + '/views/layouts/',  
-        partialsDir: __dirname + '/views/partials/' 
+        partialsDir: __dirname + '/views/partials/',
+        helpers: {
+            equals: function(a, b) {
+                console.log('equals');
+                console.log(a, b);
+                return a === b;
+            }
+        }
     }
 ))
 app.set('view engine', 'hbs');

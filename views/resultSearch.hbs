@@ -1,5 +1,5 @@
 <div class="container mt-4">
-    <h1>Search Results</h1>
+    <h1>Search results: {{this.searchText}}</h1>
 
     {{#if movies.length}}
         <div class="row">
@@ -10,23 +10,45 @@
                         <div class="card-body">
                             <h6 class="card-title">{{this.title}}</h6>
                             <p class="card-text">Genre: {{#each this.genres}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</p>
-                            {{!-- <p class="card-text">Rating: {{this.rating}}</p> --}}
                         </div>
                     </div>
                 </div>
             {{/each}}
         </div>
 
-        {{#if total_pages}}
-            <div class="pagination">
-                {{#if prev_page}}
-                    <a href="?page={{prev_page}}">Previous</a>
-                {{/if}}
-                <span>Page {{page}} of {{total_pages}}</span>
-                {{#if next_page}}
-                    <a href="?page={{next_page}}">Next</a>
-                {{/if}}
-            </div>
+        {{#if totalPages}}
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    {{#if prevPage}}
+                    <li class="page-item">
+                        <a class="page-link" href="/search?page={{prevPage}}&searchText={{this.searchText}}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {{/if}}
+
+                    {{#each pages}}
+                        {{#if (equals this ../page)}}
+                            <li class="page-item active">
+                                <a class="page-link" href="#">{{this}}</a>
+                            </li>
+                        {{else}}
+                            <li class="page-item">
+                                <a class="page-link" href="/search?page={{this}}&searchText={{../searchText}}">{{this}}</a>
+                            </li>
+                        {{/if}}
+                    {{/each}}
+
+                   
+                    {{#if nextPage}}
+                    <li class="page-item">
+                        <a class="page-link" href="/search?page={{nextPage}}&searchText={{this.searchText}}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    {{/if}}
+                </ul>
+            </nav>
         {{/if}}
     {{else}}
         <p>No movies found.</p>
