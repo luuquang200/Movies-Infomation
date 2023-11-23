@@ -6,18 +6,21 @@
         <h2>{{movie.title}}</h2>
         <p><strong>Year:</strong> <span class="custom-link">{{#if movie.year}}{{movie.year}}{{else}}N/A{{/if}}</span></p>
         <p><strong>Rating:</strong> <span class="custom-link">{{#if movie.rating}}{{movie.rating}}{{else}}N/A{{/if}}</span></p>
-        <p><strong>Genres:</strong> <span class="custom-link">{{#each genres}}{{this.name}}{{#unless @last}}, {{/unless}}{{/each}}</span></p>
+        <p><strong>Genres:</strong> <span class="custom-link">{{#if genres.length}}{{#each genres}}{{this.name}}{{#unless @last}}, {{/unless}}{{/each}}{{else}}N/A{{/if}}</span></p>
         <p><strong>Casts:</strong> 
+            {{#if casts.length}}
                 {{#each casts}}
-                    {{#ifCond @index '<' 20}}
-                        <a href="/cast/{{this.id}}" class="custom-link">{{this.name}}</a>{{#unless @last}}, {{/unless}}
+                    {{#ifCond @index '<' 20}} <a href="/cast/{{this.id}}" class="custom-link">{{this.name}}</a>{{#unless @last}}, {{/unless}}
                     {{/ifCond}}
                 {{/each}}
                 {{#ifCond casts.length '>' 20}}
                     <span id="dots" style="display: inline;">...</span>
                     <span id="moreCasts" style="display: none;">
                         {{#each casts}}
-                            {{#ifCond @index '>=' 20}}
+                            {{#ifCond @index '===' 20}}
+                                    <a href="/cast/{{this.id}}" class="custom-link">{{this.name}}</a>
+                            {{/ifCond}}
+                            {{#ifCond @index '>' 20}}
                                 , <a href="/cast/{{this.id}}" class="custom-link">{{this.name}}</a>
                             {{/ifCond}}
                         {{/each}}
@@ -25,29 +28,36 @@
                     <a href="#" id="showMoreCasts" >more</a>
                     <a href="#" id="showLessCasts" style="display: none;" >less</a>
                 {{/ifCond}}
-            </p>
+            {{else}}N/A{{/if}}
+        </p>
         <p><strong>Synopsis:</strong> 
-            <span class="synopsis cusom-text">{{truncateText synopsis.text 1000}} <a href="#" class="more">more</a></span>
-            <span class="full-text cusom-text" style="display: none;">{{synopsis.text}} <a href="#" class="less">less</a></span>
+            {{#if synopsis.text}}
+                <span class="synopsis cusom-text">{{truncateText synopsis.text 1000}} <a href="#" class="more">more</a></span>
+                <span class="full-text cusom-text" style="display: none;">{{synopsis.text}} <a href="#" class="less">less</a></span>
+            {{else}}N/A{{/if}}
         </p>
     </div>
 </div>
 <h3 class="ms-4">Reviews:</h3>
 <div id="reviewContainer" >
-    {{#each reviews}}
-        <div class="card mb-4 m-4 dark">
-            <div class="card-header">
-                <h5 class="card-title">{{this.reviewtitle}}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">by {{this.author}} on {{formatDate this.submissiondate}}</h6>
+    {{#if reviews.length}}
+        {{#each reviews}}
+            <div class="card mb-4 m-4 dark">
+                <div class="card-header">
+                    <h5 class="card-title">{{this.reviewtitle}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">by {{this.author}} on {{formatDate this.submissiondate}}</h6>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{this.reviewtext}}</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">{{this.authorrating}} out of 10 stars</small>
+                </div>
             </div>
-            <div class="card-body">
-                <p class="card-text">{{this.reviewtext}}</p>
-            </div>
-            <div class="card-footer">
-                <small class="text-muted">{{this.authorrating}} out of 10 stars</small>
-            </div>
-        </div>
-    {{/each}}
+        {{/each}}
+    {{else}}
+        <p>N/A</p>
+    {{/if}}
 </div>
 
 <nav aria-label="Page navigation example">

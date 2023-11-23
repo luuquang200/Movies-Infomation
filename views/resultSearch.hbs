@@ -5,13 +5,15 @@
         <div class="row">
             {{#each movies}}
                 <div class="col-md-3">
-                    <div class="card mb-4">
-                        <img class="card-img-top" src="{{this.img}}" alt="{{this.title}}">
-                        <div class="card-body">
-                            <h6 class="card-title">{{this.title}}</h6>
-                            <p class="card-text">Genre: {{#each this.genres}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</p>
+                    <a href="/movie/{{this.id}}" style="color: inherit; text-decoration: none;">
+                        <div class="card mb-4 movie-card">
+                            <img class="card-img-top" src="{{this.img}}" alt="{{this.title}}">
+                            <div class="card-body">
+                                <h6 class="card-title">{{this.title}}</h6>
+                                <p class="card-text">Rating: {{this.rating}}</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             {{/each}}
         </div>
