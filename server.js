@@ -64,9 +64,12 @@ app.engine('hbs', hbs.engine(
             },
 
             formatDate: function(date) {
-                return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' });
+                if (date) {
+                    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' });
+                } else {
+                    return '';
+                }
             }
-
 
 
         }

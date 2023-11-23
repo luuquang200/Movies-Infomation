@@ -33,25 +33,47 @@
     </div>
 </div>
 <h3 class="ms-4">Reviews:</h3>
-{{!-- {{#each reviews}}
-    <div class="review card bg-light mb-3">
-        <div class="card-body">
-            <h4 class="card-title">{{this.reviewtitle}}</h4>
-            <p class="card-text">{{this.reviewtext}}</p>
+<div id="reviewContainer" >
+    {{#each reviews}}
+        <div class="card mb-4 m-4 dark">
+            <div class="card-header">
+                <h5 class="card-title">{{this.reviewtitle}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">by {{this.author}} on {{formatDate this.submissiondate}}</h6>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{this.reviewtext}}</p>
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">{{this.authorrating}} out of 10 stars</small>
+            </div>
         </div>
-    </div>
-{{/each}} --}}
-{{#each reviews}}
-    <div class="card mb-4 m-4">
-        <div class="card-header">
-            <h5 class="card-title">{{this.reviewtitle}}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">by {{this.author}} on {{formatDate this.submissiondate}}</h6>
-        </div>
-        <div class="card-body">
-            <p class="card-text">{{this.reviewtext}}</p>
-        </div>
-        <div class="card-footer">
-            <small class="text-muted">{{this.authorrating}} out of 10 stars</small>
-        </div>
-    </div>
-{{/each}}
+    {{/each}}
+</div>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination  ps-4" id="pagination">
+        <li class="page-item">
+            <a class="page-link" id="prevPage" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+
+        {{#each pagesReviews}}
+            {{#if (equals this ../page)}}
+                <li class="page-item active">
+                    <a class="page-link" >{{this}}</a>
+                </li>
+            {{else}}
+                <li class="page-item">
+                    <a class="page-link"  class="page-link-item" data-page="{{this}}">{{this}}</a>
+                </li>
+            {{/if}}
+        {{/each}}
+
+        <li class="page-item">
+            <a class="page-link" id="nextPage" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>

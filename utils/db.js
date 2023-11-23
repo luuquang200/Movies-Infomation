@@ -285,7 +285,7 @@ module.exports = {
     },
 
     // get reviews for a movie
-    getMovieReviews: async (id) => {
+    getAllMovieReviews: async (id) => {
         let databaseConnection = null;
         try {
             databaseConnection = await db.connect();
@@ -300,5 +300,44 @@ module.exports = {
             }
         }
     },
+
+    // get reviews for a movie
+    getMovieReviews: async (id,  per_page, page) => {
+        let databaseConnection = null;
+        try {
+            databaseConnection = await db.connect();
+            const offset = (page - 1) * per_page;
+
+            const total = await databaseConnection.one(`
+                SELECT COUNT(DISTINCT reviews.id) 
+                FROM reviews 
+                WHERE reviews.movieId = $1
+            `, [id]);
+
+            const reviews = await databaseConnection.any(`
+                SELECT * 
+                FROM reviews 
+                WHERE movieId = $1
+                LIMIT $2 OFFSET $3
+            `, [id, per_page, offset]);
+
+            // console.log(reviews);
+
+            return {
+                page: page,
+                per_page: per_page,
+                total: Number(total.count),
+                total_pages: Math.ceil(total.count / per_page),
+                data: reviews
+            };
+        } catch (error) {
+            console.error(`Error getting reviews for movie:`, error);
+            throw new Error(`Could not get reviews for movie`);
+        } finally {
+            if (databaseConnection) {
+                databaseConnection.done();
+            }
+        }
+    }
 
 };

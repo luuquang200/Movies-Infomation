@@ -59,10 +59,17 @@ class Movie {
     }
 
     // get reviews of a movie by id
-    static async getMovieReviews(id) {
-        const result = await db.getMovieReviews(id);
+    static async getAllMovieReviews(id) {
+        const result = await db.getAllMovieReviews(id);
         return result;
     }
+
+    // get reviews of a movie by id
+    static async getMovieReviews(id, numberOfPage, page) {
+        const result = await db.getMovieReviews(id, numberOfPage, page);
+        return result;
+    }
+
 }
 
 module.exports = Movie;

@@ -163,4 +163,96 @@ $(document).ready(function () {
         $('.synopsis').show();
     });
 
+    // review page pagination
+    let currentPage = 1;
+    let totalPages = 1;
+    loadReviews(currentPage);
+
+    function loadReviews(page) {
+        let movieId = window.location.pathname.split('/')[2];
+        $.getJSON(`/movie/${movieId}/reviews?page=${page}`, function(response) {
+            totalPages = response.total_pages;
+            const reviewContainer = $('#reviewContainer');
+            reviewContainer.empty();
+
+            response.data.forEach(review => {
+                const reviewHtml = `
+                    <div class="card mb-4 m-4">
+                        <div class="card-header">
+                            <h5 class="card-title">${review.reviewtitle}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">by ${review.author} on ${formatDate(review.submissiondate)}</h6>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">${review.reviewtext}</p>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">${review.authorrating} out of 10 stars</small>
+                        </div>
+                    </div>
+                `;
+                reviewContainer.append(reviewHtml);
+            });
+
+            // update pagination ui
+            const pagination = $('#pagination');
+            pagination.empty();
+            let paginationHtml = '';
+            if (response.total_pages > 1) {
+                paginationHtml += `
+                    <li class="page-item">
+                        <a class="page-link" id="prevPage" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                `;
+                for (let i = 1; i <= response.total_pages; i++) {
+                    paginationHtml += `
+                        <li class="page-item page-link-item ${i === page ? 'active' : ''}">
+                            <a data-page="${i}" class="page-link">${i}</a>
+                        </li>
+                    `;
+                }
+                paginationHtml += `
+                    <li class="page-item">
+                        <a class="page-link" id="nextPage" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                `;
+            }
+            pagination.append(paginationHtml);
+        });
+    }
+
+    $(document).on('click', '.page-link-item a', function(e) {
+        e.preventDefault();
+        currentPage = $(this).data('page');
+        loadReviews(currentPage);
+    });
+
+    $(document).on('click', '#prevPage', function(e) {
+        e.preventDefault();
+        if (currentPage > 1) {
+            currentPage--;
+            loadReviews(currentPage);
+        }
+    });
+
+    $(document).on('click', '#nextPage', function(e) {
+        e.preventDefault();
+        if (currentPage < totalPages) {
+            currentPage++;
+            loadReviews(currentPage);
+        }
+    });
+
+
+    function formatDate(date) {
+        if (date) {
+            return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' });
+        } else {
+            return '';
+        }
+    }
+
 });
