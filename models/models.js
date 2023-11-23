@@ -1,37 +1,5 @@
 const db = require('../utils/db');
 
-// class Movies {
-//     static async insert(movie) {
-//         // Implementation here...
-//         const { id, img, title, year, topRank, rating, ratingCount } = movie;
-//         const result = await db.none(
-//             'INSERT INTO Movies (id, img, title, year, topRank, rating, ratingCount) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-//             [id, img, title, year, topRank, rating, ratingCount]
-//         );
-//         return result;
-//     }
-
-//     static async update(movie) {
-//         // Implementation here...
-//         const { id, img, title, year, topRank, rating, ratingCount } = movie;
-//         const result = await db.none(
-//             'UPDATE Movies SET img = $1, title = $2, year = $3, topRank = $4, rating = $5, ratingCount = $6 WHERE id = $7',
-//             [img, title, year, topRank, rating, ratingCount, id]
-//         );
-//         return result;
-//     }
-
-//     static async findById(id) {
-//         // Implementation here...
-//         const result = await db.oneOrNone('SELECT * FROM Movies WHERE id = $1', [id]);
-//         return result;
-//     }
-
-//     static async deleteAll() {
-//         const result = await db.deleteAll('Movies');
-//         return result;
-//     }
-// }
 
 class Genres {
     static async findByName(name) {

@@ -9,7 +9,7 @@ const contentRouter = require('./routers/contentRouter');
 const dataImportRouter = require('./routers/dataImportRouter');
 const searchRouter = require('./routers/searchRouter');
 const movieDetailRouter = require('./routers/movieDetailRouter');
-
+const castDetailRouter = require('./routers/castDetailRouter');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -56,11 +56,10 @@ app.engine('hbs', hbs.engine(
             },
 
             truncateText: function(text, limit) {
-                if (text.length > limit) {
+                if (text && text.length > limit) {
                     return text.substring(0, limit) + '...';
-                } else {
-                    return text;
                 }
+                return text;
             },
 
             formatDate: function(date) {
@@ -103,7 +102,7 @@ app.use('/home', ensureAuthenticated, contentRouter);
 app.use('/data-import', ensureAuthenticated, dataImportRouter);
 app.use('/search', ensureAuthenticated, searchRouter);
 app.use('/movie', ensureAuthenticated, movieDetailRouter);
-
+app.use('/cast', ensureAuthenticated, castDetailRouter);
 
 app.get('/', (req, res) => {
     if (req.user) {

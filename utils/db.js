@@ -266,8 +266,8 @@ module.exports = {
             databaseConnection = await db.connect();
             const movie = await databaseConnection.oneOrNone(`SELECT * FROM movies WHERE id = $1`, [id]);
             const genres = await databaseConnection.any(`SELECT genres.name FROM genres LEFT JOIN moviegenres ON genres.id = moviegenres.genreId WHERE moviegenres.movieId = $1`, [id]);
-            const casts = await databaseConnection.any(`SELECT casts.name FROM casts LEFT JOIN moviecasts ON casts.id = moviecasts.castId WHERE moviecasts.movieId = $1`, [id]);
-            const synopsis = await databaseConnection.oneOrNone(`SELECT text FROM synopses WHERE movieId = $1`, [id]);
+            const casts = await databaseConnection.any(`SELECT DISTINCT casts.* FROM casts LEFT JOIN moviecasts ON casts.id = moviecasts.castId WHERE moviecasts.movieId = $1`, [id]);
+            const synopsis = await databaseConnection.oneOrNone(`SELECT text FROM synopses WHERE movieId = $1 LIMIT 1`, [id]);
             return {
                 movie: movie,
                 genres: genres,
@@ -338,6 +338,30 @@ module.exports = {
                 databaseConnection.done();
             }
         }
-    }
+    },
+
+    //get cast by id
+    getCastDetails: async (id) => {
+        let databaseConnection = null;
+        try {
+            databaseConnection = await db.connect();
+            const cast = await databaseConnection.oneOrNone(`SELECT * FROM casts WHERE id = $1`, [id]);
+            const movies = await databaseConnection.any(`SELECT DISTINCT movies.* FROM movies LEFT JOIN moviecasts ON movies.id = moviecasts.movieId WHERE moviecasts.castId = $1`, [id]);
+            return {
+                cast: cast,
+                movies: movies
+            };
+        } catch (error) {
+            console.error(`Error getting details for cast:`, error);
+            throw new Error(`Could not get details for cast`);
+        } finally {
+            if (databaseConnection) {
+                databaseConnection.done();
+            }
+        }
+    },
+
+
+
 
 };
