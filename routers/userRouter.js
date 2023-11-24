@@ -14,5 +14,7 @@ router.get('/login', (req, res) => {
 router.post('/:movieId/favorites/add', userController.addFavoriteMovie);
 router.get('/profile', userController.getProfile);
 
+router.post('/logout', userController.logout);
+
 
 module.exports = router;

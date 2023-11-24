@@ -274,6 +274,19 @@ $(document).ready(function () {
         }
     }
 
-    
+    // profile page
+    // $('#remember-login').change(function() {
+    //     document.cookie = 'selectedRemember=' + this.checked + ';path=/';
+    // });
 
+    $('#logout-button').click(function() {
+        $.ajax({
+            url: '/user/logout',
+            type: 'POST',
+            success: function() {
+                window.location.replace('/user/login');
+
+            }
+        });
+    });
 });

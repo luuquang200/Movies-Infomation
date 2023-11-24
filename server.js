@@ -14,6 +14,14 @@ const favoritesRouter = require('./routers/favoritesRouter');
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.use(function (req, res, next) {
+    res.setHeader('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    res.setHeader('Expires', '-1');
+    res.setHeader('Pragma', 'no-cache');
+    next();
+});
+
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 

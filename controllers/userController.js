@@ -60,8 +60,14 @@ module.exports = {
 
             // Send the session ID in a cookie
             const remember = req.body.remember === 'on';
-            const maxAge = remember ? 15 * 24 * 60 * 60 * 1000 : null; // 15 days or session only
-            res.cookie('sessionId', user.sessionId, { maxAge, httpOnly: true });
+            if(remember) {
+                const maxAge = 24 * 60 * 60 * 1000; // 1 day or session only
+                // res.cookie('selectedRemember', true, { maxAge, httpOnly: true });
+                res.cookie('sessionId', user.sessionId, { maxAge, httpOnly: true });
+            }
+            else {
+                res.cookie('sessionId', user.sessionId, { httpOnly: true });
+            }
             
             res.send('Login successful');
         } catch (err) {
@@ -93,18 +99,37 @@ module.exports = {
         }
     },
 
-     getProfile: async (req, res) => {
+    getProfile: async (req, res) => {
         try {
-            const user = await User.findBySessionId(req.sessionId);
-            const favoriteMovies = await User.getFavoriteMovies(user.id);
+            const user = await User.findBySessionId(req.cookies.sessionId);
             if (!user) {
                 return res.status(400).json({ field: 'sessionId', message: 'Session ID not found' });
             }
-            res.json(user);
+            const selectedRemember = req.cookies.selectedRemember;
+            // console.log(selectedRemember);
+            const favoriteMovies = await User.getFavoriteMovies(user.id);
+            res.render('profile', { user: user, favoriteMovies: favoriteMovies, selectedRemember: selectedRemember });
         } catch (err) {
             console.error(err);
             res.status(500).send('Server error');
         }
     },
+
+    logout: async (req, res) => {
+        try {
+            console.log('logout');
+            const user = await User.findBySessionId(req.cookies.sessionId);
+            if (!user) {
+                return res.status(400).json({ field: 'sessionId', message: 'Session ID not found' });
+            }
+            user.sessionId = null;
+            await User.update(user.id, 'sessionid', null);
+            res.clearCookie('sessionId');
+            res.redirect('/');
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Server error');
+        }
+    }
 };
   
