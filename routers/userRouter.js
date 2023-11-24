@@ -11,7 +11,6 @@ router.get('/login', (req, res) => {
     res.render('login', { layout: 'authentication' });
 });
 
-router.post('/:movieId/favorites/add', userController.addFavoriteMovie);
 router.get('/profile', userController.getProfile);
 
 router.post('/logout', userController.logout);

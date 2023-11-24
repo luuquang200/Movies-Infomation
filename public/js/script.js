@@ -182,6 +182,25 @@ $(document).ready(function () {
         });
     });
 
+    $('.remove-favorite').click(function(event) {
+        event.preventDefault();
+        var movieId = $(this).data('movie-id');
+        $.ajax({
+            url: '/favorites/remove',
+            type: 'POST',
+            data: { movieId: movieId },
+            success: function(response) {
+                window.location.reload();
+            },
+            error: function(xhr) {
+                if (xhr.status === 400) {
+                    var error = JSON.parse(xhr.responseText);
+                    alert(error.message);
+                }
+            }
+        });
+    });
+
     // review page pagination
     let currentPage = 1;
     let totalPages = 1;
@@ -289,4 +308,5 @@ $(document).ready(function () {
             }
         });
     });
+
 });

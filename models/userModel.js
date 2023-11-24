@@ -40,6 +40,10 @@ class User {
     return db.insertOne('Favorites', { userId: userId, movieId: movieId });
   }
 
+  static async removeFavoriteMovie(userId, movieId) {
+    return db.deleteFavoriteMovie(userId, movieId);
+  }
+
   static async getFavoriteMovies(userId) {
     return db.getFavoriteMovies(userId);
   }

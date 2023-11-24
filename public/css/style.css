@@ -26,6 +26,9 @@ card-body {
     max-height: 350px;
     /* object-fit: cover; */
 }
+.custom-poster{
+    width: 100%;
+}
 
 .movie-card {
     display: flex;
@@ -79,6 +82,14 @@ card-body {
 
 /* detail cast */
 .cast-infor p {
+    font-size: 18px;
+    color: #333;
+    line-height: 1.6;
+    font-weight: 500;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.infor-text p {
     font-size: 18px;
     color: #333;
     line-height: 1.6;

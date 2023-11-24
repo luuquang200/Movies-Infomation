@@ -99,6 +99,30 @@ module.exports = {
         }
     },
 
+    // remove a favorite movie from the database
+    removeFavoriteMovie: async (req, res) => {
+        try {
+            const user = await User.findBySessionId(req.cookies.sessionId);
+            const movieId = req.body.movieId; 
+            if (!user) {
+                return res.status(400).json({ field: 'sessionId', message: 'Session ID not found' });
+            }
+
+            // check if the movie is already in the database
+            const favoriteMovies = await User.getFavoriteMovies(user.id);
+            if(!favoriteMovies.find(movie => movie.id === movieId)) {
+                return res.status(400).json({ field: 'movieId', message: 'Movie not in favorites' });
+            }
+
+            await User.removeFavoriteMovie(user.id, movieId);
+            res.json({ message: 'Movie removed from favorites' });
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Server error');
+        }
+    },
+
+
     getProfile: async (req, res) => {
         try {
             const user = await User.findBySessionId(req.cookies.sessionId);
@@ -117,7 +141,6 @@ module.exports = {
 
     logout: async (req, res) => {
         try {
-            console.log('logout');
             const user = await User.findBySessionId(req.cookies.sessionId);
             if (!user) {
                 return res.status(400).json({ field: 'sessionId', message: 'Session ID not found' });

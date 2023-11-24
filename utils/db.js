@@ -357,6 +357,23 @@ module.exports = {
         }
     },
 
+    // deleteFavoriteMovie
+    deleteFavoriteMovie: async (userId, movieId) => {
+        let databaseConnection = null;
+        try {
+            databaseConnection = await db.connect();
+            await databaseConnection.none(`DELETE FROM favorites WHERE userId = $1 AND movieId = $2`, [userId, movieId]);
+            return true;
+        } catch (error) {
+            console.error(`Error deleting favorite movie:`, error);
+            throw new Error(`Could not delete favorite movie`);
+        } finally {
+            if (databaseConnection) {
+                databaseConnection.done();
+            }
+        }
+    },
+
     //get cast by id
     getCastDetails: async (id) => {
         let databaseConnection = null;
