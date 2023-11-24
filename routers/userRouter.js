@@ -11,5 +11,8 @@ router.get('/login', (req, res) => {
     res.render('login', { layout: 'authentication' });
 });
 
+router.post('/:movieId/favorites/add', userController.addFavoriteMovie);
+router.get('/profile', userController.getProfile);
+
 
 module.exports = router;

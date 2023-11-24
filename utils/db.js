@@ -146,6 +146,23 @@ module.exports = {
         }
     },
 
+    // get favorites movie by user id
+    getFavoriteMovies: async (userId) => {
+        let databaseConnection = null;
+        try {
+            databaseConnection = await db.connect();
+            const sql = `SELECT movies.* FROM movies JOIN favorites ON movies.id = favorites.movieId WHERE favorites.userId = $1`;
+            const favoriteMovies = await databaseConnection.any(sql, [userId]);
+            return favoriteMovies;
+        } catch (error) {
+            throw error;
+        } finally { 
+            if (databaseConnection) {
+                databaseConnection.done();
+            }
+        }
+    },
+    
    
     none: async (sql, values) => {
         let databaseConnection = null;

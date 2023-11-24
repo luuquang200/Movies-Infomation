@@ -35,6 +35,14 @@ class User {
   static async findBySessionId(sessionId) {
     return db.getUserBySessionId(sessionId);
   }
+
+  static async addFavoriteMovie(userId, movieId) {
+    return db.insertOne('Favorites', { userId: userId, movieId: movieId });
+  }
+
+  static async getFavoriteMovies(userId) {
+    return db.getFavoriteMovies(userId);
+  }
 }
 
 module.exports = User;

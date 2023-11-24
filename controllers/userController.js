@@ -69,5 +69,42 @@ module.exports = {
             res.status(500).send('Server error');
         }
     },
+
+    // add a favorite movie to the database
+    addFavoriteMovie: async (req, res) => {
+        try {
+            const user = await User.findBySessionId(req.cookies.sessionId);
+            const movieId = req.body.movieId; 
+            if (!user) {
+                return res.status(400).json({ field: 'sessionId', message: 'Session ID not found' });
+            }
+
+            // check if the movie is already in the database
+            const favoriteMovies = await User.getFavoriteMovies(user.id);
+            if(favoriteMovies.find(movie => movie.id === movieId)) {
+                return res.status(400).json({ field: 'movieId', message: 'Movie already in favorites' });
+            }
+
+            await User.addFavoriteMovie(user.id, movieId);
+            res.json({ message: 'Movie added to favorites' });
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Server error');
+        }
+    },
+
+     getProfile: async (req, res) => {
+        try {
+            const user = await User.findBySessionId(req.sessionId);
+            const favoriteMovies = await User.getFavoriteMovies(user.id);
+            if (!user) {
+                return res.status(400).json({ field: 'sessionId', message: 'Session ID not found' });
+            }
+            res.json(user);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Server error');
+        }
+    },
 };
   

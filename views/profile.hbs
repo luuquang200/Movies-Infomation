@@ -1,0 +1,37 @@
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" id="account-tab" data-toggle="tab" href="#account">Account</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="favorites-tab" data-toggle="tab" href="#favorites">Favorites</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="account">
+            <h3>Account Information</h3>
+            <p>Username: {{user.username}}</p>
+            <p>Email: {{user.email}}</p>
+            <button id="logout-button" class="btn btn-primary">Logout</button>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="remember-login">
+                <label class="form-check-label" for="remember-login">
+                    Remember login
+                </label>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="favorites">
+            <h3>Favorite Movies</h3>
+            {{#each user.favorites}}
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.title}}</h5>
+                        <p class="card-text">{{this.synopsis}}</p>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    </div>
+</div>

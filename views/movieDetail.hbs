@@ -2,8 +2,9 @@
     <div class="col-md-4 text-center">
         <img src="{{movie.img}}" alt="{{movie.title}}" class="img-fluid rounded poster-detail">
     </div>
-    <div class="col-md-8">
+    <div class="col-md-8 cast-info">
         <h2>{{movie.title}}</h2>
+        <button id="add-to-favorites" class="btn btn-primary mb-3" data-movie-id="{{movie.id}}">Add to Favorites</button>
         <p><strong>Year:</strong> <span class="custom-link">{{#if movie.year}}{{movie.year}}{{else}}N/A{{/if}}</span></p>
         <p><strong>Rating:</strong> <span class="custom-link">{{#if movie.rating}}{{movie.rating}}{{else}}N/A{{/if}}</span></p>
         <p><strong>Genres:</strong> <span class="custom-link">{{#if genres.length}}{{#each genres}}{{this.name}}{{#unless @last}}, {{/unless}}{{/each}}{{else}}N/A{{/if}}</span></p>

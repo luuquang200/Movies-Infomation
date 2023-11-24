@@ -10,6 +10,7 @@ const dataImportRouter = require('./routers/dataImportRouter');
 const searchRouter = require('./routers/searchRouter');
 const movieDetailRouter = require('./routers/movieDetailRouter');
 const castDetailRouter = require('./routers/castDetailRouter');
+const favoritesRouter = require('./routers/favoritesRouter');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -103,6 +104,7 @@ app.use('/data-import', ensureAuthenticated, dataImportRouter);
 app.use('/search', ensureAuthenticated, searchRouter);
 app.use('/movie', ensureAuthenticated, movieDetailRouter);
 app.use('/cast', ensureAuthenticated, castDetailRouter);
+app.use('/favorites', ensureAuthenticated, favoritesRouter);
 
 app.get('/', (req, res) => {
     if (req.user) {
